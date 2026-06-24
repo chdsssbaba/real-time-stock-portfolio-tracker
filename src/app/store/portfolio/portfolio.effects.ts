@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of, timer, from } from 'rxjs';
@@ -10,6 +10,10 @@ import { PortfolioState } from './portfolio.state';
 
 @Injectable()
 export class PortfolioEffects {
+  private actions$ = inject(Actions);
+  private stockDataService = inject(StockDataService);
+  private store = inject(Store<PortfolioState>);
+
   loadPortfolio$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PortfolioActions.loadPortfolio),
@@ -101,10 +105,4 @@ export class PortfolioEffects {
       )
     )
   );
-
-  constructor(
-    private actions$: Actions,
-    private stockDataService: StockDataService,
-    private store: Store<PortfolioState>
-  ) {}
 }
