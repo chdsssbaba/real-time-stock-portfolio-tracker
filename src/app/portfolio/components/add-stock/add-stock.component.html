@@ -1,0 +1,49 @@
+<div class="add-stock-container">
+  <form (submit)="onAdd(); $event.preventDefault();" class="add-stock-form">
+    <div class="input-group search-group">
+      <input 
+        type="text" 
+        [(ngModel)]="symbol" 
+        name="symbol"
+        (input)="onSearchChange()" 
+        (blur)="closeDropdown()"
+        placeholder="Symbol (e.g. MSFT)" 
+        autocomplete="off"
+        class="glass-input symbol-input"
+        aria-label="Stock Symbol"
+      />
+      <div *ngIf="showDropdown" class="autocomplete-dropdown glass-panel">
+        <div 
+          *ngFor="let result of searchResults" 
+          (click)="selectResult(result)" 
+          class="dropdown-item"
+        >
+          <span class="symbol-tag">{{ result.symbol }}</span>
+          <span class="name-tag">{{ result.name }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="input-group quantity-group">
+      <input 
+        type="number" 
+        [(ngModel)]="quantity" 
+        name="quantity"
+        min="1" 
+        placeholder="Qty" 
+        class="glass-input quantity-input"
+        aria-label="Quantity"
+      />
+    </div>
+    
+    <button type="submit" class="add-button">
+      <span class="btn-icon">
+        <svg viewBox="0 0 24 24" width="16" height="16">
+          <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+        </svg>
+      </span>
+      Add Stock
+    </button>
+  </form>
+  <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+</div>
