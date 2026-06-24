@@ -1,0 +1,32 @@
+<div class="portfolio-dashboard">
+  <div class="dashboard-header-row">
+    <h1 class="dashboard-title">Portfolio Dashboard</h1>
+    <app-add-stock></app-add-stock>
+  </div>
+  
+  <!-- Error Display -->
+  <div *ngIf="error$ | async as error" class="error-banner glass-panel">
+    <span class="error-icon">
+      <svg viewBox="0 0 24 24" width="20" height="20">
+        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+      </svg>
+    </span>
+    <span class="error-text">{{ error }}</span>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="summary-card-container">
+      <app-portfolio-summary></app-portfolio-summary>
+    </div>
+    
+    <div class="list-card-container glass-panel">
+      <div class="card-header">
+        <h2 class="card-title">Assets & Holdings</h2>
+        <div *ngIf="loading$ | async" class="spinner-container">
+          <div class="mini-spinner"></div>
+        </div>
+      </div>
+      <app-stock-list></app-stock-list>
+    </div>
+  </div>
+</div>
