@@ -1,0 +1,19 @@
+<div class="summary-card glass-panel">
+  <h3 class="card-label">Total Value</h3>
+  <div class="total-value">{{ totalValue$ | async | currency }}</div>
+  
+  <div class="change-row" *ngIf="dailyChange$ | async as dailyChange">
+    <span class="change-badge" [ngClass]="{'positive': dailyChange.absoluteChange >= 0, 'negative': dailyChange.absoluteChange < 0}">
+      <span class="badge-icon">
+        <svg *ngIf="dailyChange.absoluteChange >= 0" viewBox="0 0 24 24" width="16" height="16">
+          <path fill="currentColor" d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/>
+        </svg>
+        <svg *ngIf="dailyChange.absoluteChange < 0" viewBox="0 0 24 24" width="16" height="16">
+          <path fill="currentColor" d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/>
+        </svg>
+      </span>
+      {{ dailyChange.absoluteChange >= 0 ? '+' : '' }}{{ dailyChange.absoluteChange | currency }} ({{ dailyChange.changePercent >= 0 ? '+' : '' }}{{ dailyChange.changePercent }}%)
+    </span>
+    <span class="change-label">Today</span>
+  </div>
+</div>
