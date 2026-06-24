@@ -1,0 +1,65 @@
+<div class="stock-list-container">
+  <ng-container *ngIf="(stocks$ | async) as stocks; else loadingState">
+    <div *ngIf="stocks.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" width="48" height="48">
+          <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+        </svg>
+      </div>
+      <p>No assets in your portfolio yet. Search and add a stock to start tracking!</p>
+    </div>
+
+    <div *ngIf="stocks.length > 0" class="table-responsive">
+      <table class="stock-table">
+        <thead>
+          <tr>
+            <th>Asset</th>
+            <th>Price</th>
+            <th>Change</th>
+            <th>Holdings</th>
+            <th>Total Value</th>
+            <th scope="col"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let stock of stocks" [routerLink]="['/stocks', stock.symbol]" class="stock-item">
+            <td>
+              <div class="asset-info">
+                <span class="asset-symbol">{{ stock.symbol }}</span>
+                <span class="asset-name">{{ stock.name }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="asset-price">{{ stock.currentPrice | currency }}</span>
+            </td>
+            <td>
+              <span class="asset-change" [ngClass]="{'positive': stock.dailyChange >= 0, 'negative': stock.dailyChange < 0}">
+                <span class="change-amount">{{ stock.dailyChange >= 0 ? '+' : '' }}{{ stock.dailyChange | currency }}</span>
+                <span class="change-pct">({{ stock.dailyChangePercent >= 0 ? '+' : '' }}{{ stock.dailyChangePercent }}%)</span>
+              </span>
+            </td>
+            <td>
+              <span class="asset-qty">{{ stock.quantity }} shares</span>
+            </td>
+            <td>
+              <span class="asset-value">{{ (stock.currentPrice * stock.quantity) | currency }}</span>
+            </td>
+            <td class="action-cell">
+              <button class="remove-btn" (click)="onRemove(stock.symbol, $event)" aria-label="Remove stock">
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                  <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-template #loadingState>
+    <div class="empty-state">
+      <div class="mini-spinner"></div>
+    </div>
+  </ng-template>
+</div>
