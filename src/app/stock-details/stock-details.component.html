@@ -1,0 +1,68 @@
+<div class="details-container">
+  <div class="back-navigation">
+    <a routerLink="/portfolio" class="back-link">
+      <span class="back-icon">
+        <svg viewBox="0 0 24 24" width="16" height="16">
+          <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+      </span>
+      Back to Dashboard
+    </a>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="mini-spinner"></div>
+    <p>Loading asset details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-banner glass-panel">
+    <span class="error-icon">
+      <svg viewBox="0 0 24 24" width="20" height="20">
+        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+      </svg>
+    </span>
+    <span class="error-text">{{ error }}</span>
+  </div>
+
+  <!-- Stock Details -->
+  <div *ngIf="!loading && !error && stock" class="stock-details-view">
+    <div class="details-header-card glass-panel">
+      <div class="header-main-info">
+        <div class="stock-identity">
+          <h1 class="stock-symbol">{{ stock.symbol }}</h1>
+          <p class="stock-name">{{ stock.name }}</p>
+        </div>
+
+        <div class="price-section">
+          <div class="current-price">{{ stock.currentPrice | currency }}</div>
+          <div class="change-section" [ngClass]="{'positive': stock.dailyChange >= 0, 'negative': stock.dailyChange < 0}">
+            {{ stock.dailyChange >= 0 ? '+' : '' }}{{ stock.dailyChange | currency }} ({{ stock.dailyChangePercent >= 0 ? '+' : '' }}{{ stock.dailyChangePercent }}%)
+          </div>
+        </div>
+      </div>
+      
+      <div class="holdings-summary-info glass-panel" *ngIf="portfolioStock">
+        <div class="holdings-title">My Portfolio Holdings</div>
+        <div class="holdings-body">
+          <span class="qty">{{ portfolioStock.quantity }} shares</span>
+          <span class="separator">&middot;</span>
+          <span class="val">{{ (portfolioStock.currentPrice * portfolioStock.quantity) | currency }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-card glass-panel">
+      <h2 class="chart-title">30-Day Historical Trend</h2>
+      <div class="chart-wrapper">
+        <canvas baseChart
+                [data]="lineChartData"
+                [options]="lineChartOptions"
+                [type]="lineChartType">
+        </canvas>
+      </div>
+    </div>
+  </div>
+</div>
